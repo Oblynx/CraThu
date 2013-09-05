@@ -10,7 +10,9 @@ world.Bounds=100;
 world.G=load('G3.txt');
 % set 'world.PEGame=0;' iff we are playing a Flocking game
 world.CaptureRadius=2.0;
-world.framerate=40;  %fps
+world.framerate=100;  %fps
+world.trailnum=6; %Positive integer
+world.palette=['r', 'b', 'c', 'm', 'y', 'k', 'w'];
 
 % bots initialization
 bots(1).strategy='Evader1(1,bots,world)';
@@ -41,5 +43,19 @@ bots(2).q=sin(a);
 bots(2).WP=[50 50; -50 50; -50 -50; 50 -50];
 bots(2).wpc=[1 0 0 0];
 
+bots(3).strategy='Pursuer1(2,bots,world)';
+bots(3).v=3.0;
+bots(3).c=0.4;
+bots(3).x=1*world.Bounds*(rand(1)-0.5);
+bots(3).y=1*world.Bounds*(rand(1)-0.5);
+  bots(3).x=1*world.Bounds*(1-0.5);
+  bots(3).y=1*world.Bounds*(-1-0.5);
+a=2*pi*rand(1);
+  a=2*pi*0.5;
+bots(2).p=cos(a);
+bots(2).q=sin(a);
+bots(2).WP=[50 50; -50 50; -50 -50; 50 -50];
+bots(2).wpc=[1 0 0 0];
+
 world=WorldUpdate(bots,world);
-[bots,world]=PEFSim(bots,world);
+[bots,world]=Simulator(bots,world);
