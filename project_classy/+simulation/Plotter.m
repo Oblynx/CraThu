@@ -1,7 +1,6 @@
 classdef Plotter < handle
 	%Plotter Displays screen output
-	%   Detailed explanation goes here
-	
+	%% Properties
 	properties (SetAccess = immutable)
 		noplot= false;
 		fID
@@ -11,7 +10,7 @@ classdef Plotter < handle
 		ln
 		trailnum
 	end
-	
+	%% Methods
 	methods
 		function p=Plotter( w, dim, fID )
 			if nargin==0
@@ -56,30 +55,14 @@ classdef Plotter < handle
 				set(p.ln(trailteam(i,:)), 'MarkerFaceColor', w.palette(i));
 			end
 		end		
-		%p.ln=WorldPaint( his.x( w.t-p.trailnum+1 : w.t, : ), p.ln, p.trailnum, world.N, world.palette, trteam(:,1:trailnum) );
 		function ClosePlot( p, N )
 			if size(p.ln,1)>N
 				delete(p.ln(N+1:end));
 			end
 		end
 		function SetTrailnum( p, w )
-			p.trailnum= w.t*simulation.Plotter.heaviside( -w.t+w.trailnum+0.5 ) + w.trailnum*simulation.Plotter.heaviside( w.t-w.trailnum-0.5 );
+			p.trailnum= w.t*simulation.heaviside( -w.t+w.trailnum+0.5 ) + w.trailnum*simulation.heaviside( w.t-w.trailnum-0.5 );
 		end
 	end
-	
-	methods (Static)
-		function u = heaviside( t )
-			%HEAVISIDE Heaviside step function u(c,t)
-			%  u_c(t)=0, t<c & u_c(t)=1, t>c & u_c(t)=0.5, t=c
-			if t<0
-				u=0;
-			elseif t>0
-				u=1;
-			else
-				u=0.5;
-			end
-		end
-	end
-	
 end
 

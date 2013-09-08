@@ -36,12 +36,6 @@ classdef Bot
 			if nargin==0
 				return
 			end
-% 			if nargin==1 && isstruct( id )
-% 			% %% A strange case, it happens when the constructor is called after
-% 			% strategy evaluation and the tmpv property is carried in <id> argument
-% 				b.tmpv=id;
-% 				return
-% 			end
 			ID=id;
 			l=0;
 			for i=1:nargin-2
@@ -56,7 +50,7 @@ classdef Bot
 			if iscell(varargin{nargin-1})
 				l=l+1;
 			end
-			b(l,1) = simulation.Bot;		% Preallocate array
+			%b(l,1) = simulation.Bot;		% Preallocate array
 			c1=1;
 			for j=1:nargin-2
 				if iscell(varargin{j})
@@ -93,6 +87,14 @@ classdef Bot
 		function momentum = get.momentum(b)
 			momentum = b.mass*b.v;
 		end
+		function tmp=strat( b, bots, n, world )
+			try
+				tmp=eval(bots(n).strategy);
+			catch err
+				tmp=[1, 1, 1];
+				rethrow(err);
+			end
+		end
 	end
 	
 	methods (Sealed = true)		%Subclasses are required to use these same methods
@@ -106,9 +108,6 @@ classdef Bot
 				way=way-length(b.WP);
 			end
 			b.wpc(way)=1;
-		end
-		function tmp=strat( bots, n, world )
-			tmp=eval(bots(n).strategy);
 		end
 		function b=move( b, w )
 			if size(b.tmpv)>0	%If strategy has been played before, update v

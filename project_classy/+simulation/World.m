@@ -1,6 +1,5 @@
 classdef (Sealed = true) World < handle
 	%World Simulation environment
-	% Created once and initialised with property values
 	% Initialise with: World {N, T, Bounds, trailnum, (palette), v0,
 	%  CaptureRadius, WaypointCap, framerate}
 	%% Properties
@@ -57,10 +56,10 @@ classdef (Sealed = true) World < handle
 		end
 		function WorldUpdate( w, bots )
 			w.t=w.t+1;
-			%pos=cell2mat({bots.x}');
 			for i=1:w.N
 				for j=i+1:w.N
-					w.D(i,j)=norm(bots(i).x-bots(j).x);
+					w.D(i,j)=norm(bots{i}.x-bots{j}.x);
+					w.D(j,i)=norm(bots{i}.x-bots{j}.x);
 				end
 			end
 		end
@@ -110,6 +109,11 @@ classdef (Sealed = true) World < handle
 				end
 			end
 			b=moveto( b, x, v );
+			if any(abs(b.x) > w.Bounds)
+				x=2*w.Bounds*(rand(size(b.x))-0.5);
+				v=simulation.Tools.VecNorm(rand(size(b.v)));
+				b=moveto( b, x, v );
+			end
 		end
 	end
 	
